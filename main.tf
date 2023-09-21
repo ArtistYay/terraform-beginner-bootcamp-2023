@@ -1,11 +1,12 @@
 terraform {
-#  backend "remote" {
-#    hostname = "app.terraform.io"
-#    organization = "ArtistUniverse"#
-#    workspaces {
-#      name = "terra-house"
-#    }
-#  }
+  #backend "remote" {
+  #  hostname = "app.terraform.io"
+  #  organization = "ArtistUniverse"#
+
+  #  workspaces {
+  #    name = "terra-house"
+  #  }
+  #}
 
   cloud {
     organization = "ArtistUniverse"
