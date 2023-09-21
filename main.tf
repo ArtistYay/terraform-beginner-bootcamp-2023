@@ -15,6 +15,7 @@ terraform {
       name = "terra-house"
     }
   }
+  
   required_providers {
     random = {
       source = "hashicorp/random"
