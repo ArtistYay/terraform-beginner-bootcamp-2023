@@ -1,12 +1,11 @@
 terraform {
-  #backend "remote" {
-  #  hostname = "app.terraform.io"
-  #  organization = "ArtistUniverse"#
-
-  #  workspaces {
-  #    name = "terra-house"
-  #  }
-  #}
+#  backend "remote" {
+#    hostname = "app.terraform.io"
+#    organization = "ArtistUniverse"#
+#    workspaces {
+#      name = "terra-house"
+#    }
+#  }
 
   cloud {
     organization = "ArtistUniverse"
@@ -15,6 +14,7 @@ terraform {
       name = "terra-house"
     }
   }
+  
   required_providers {
     random = {
       source = "hashicorp/random"
@@ -26,6 +26,10 @@ terraform {
       version = "5.17.0"
     }
   }
+}
+
+provider "aws" {
+  # Configuration options
 }
 
 provider "random" {
