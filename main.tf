@@ -1,15 +1,33 @@
-#resource "random_string" "bucket_name" {
-#  length           = 32
-#  special          = false
-#  lower            = true
-#  upper            = false
-#}
+terraform {
+  #backend "remote" {
+  #  hostname = "app.terraform.io"
+  #  organization = "ArtistUniverse"#
 
-# Creating a S3 bucket and getting the name from a variable.
-resource "aws_s3_bucket" "website_bucket" {
-  bucket = var.bucket_name
+  #  workspaces {
+  #    name = "terra-house"
+  #  }
+  #}
 
-  tags = {
-    UserUuid = var.user_uuid
-  }
+ # cloud {
+ #   organization = "ArtistUniverse"
+#
+ #   workspaces {
+ #     name = "terra-house"
+ #   }
+ # }
+  
+  #required_providers {
+  #  random = {
+  #    source = "hashicorp/random"
+  #    version = "3.5.1"
+  #  }
+
+#provider "random" {
+#  # Configuration options
+}
+
+module "terrahouse_aws" {
+  source = "./modules/terrahouse_aws"
+  user_uuid = var.user_uuid
+  bucket_name = var.bucket_name
 }
