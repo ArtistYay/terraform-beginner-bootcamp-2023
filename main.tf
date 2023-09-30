@@ -8,13 +8,12 @@ terraform {
   #  }
   #}
 
- # cloud {
- #   organization = "ArtistUniverse"
-#
- #   workspaces {
- #     name = "terra-house"
- #   }
- # }
+ cloud {
+   organization = "ArtistUniverse"
+   workspaces {
+     name = "terraform-cloud"
+   }
+ }
   
   #required_providers {
   #  random = {
