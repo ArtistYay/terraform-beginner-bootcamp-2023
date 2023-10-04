@@ -3,22 +3,40 @@ require 'json'
 require 'pry'
 require 'active_model'
 
+# Global variable. We will mock having a state or database for this development server by setting a global variable. You would never use a global variable in a production server.
 $home = {}
 
+# This is a ruby class that includes validations from ActiveRecord (Ruby package). This will represent our "Home" resources as a Ruby object.
 class Home
+  # ActiveModel is part of Ruby on Rails. It is used as on ORM. It has a module within ActiveModel that provides validations. The production Terratoens server is rails and uses very similar and in most cases identical validation. https://guides.rubyonrails.org/active_model_basics.html https://guides.rubyonrails.org/active_record_validations.html
   include ActiveModel::Validations
+
+  #Create some virtual attributes to be stored on this object. This will set a getter and setter. For example, home = new Home(). home.town = 'hello' is your setter and home.town() is the getter. 
   attr_accessor :town, :name, :description, :domain_name, :content_version
 
-  validates :town, presence: true
+  #gamers-grovo
+  validates :town, presence: true inclusion: { in: [
+    'melomaniac-mansion',
+    'cooker-cove',
+    'video-valley',
+    'the-nomad-pad',
+    'gamers-grotto'
+  ] }
+
+  # Visible to all users
   validates :name, presence: true
   validates :description, presence: true
+
+  # We want to lock this down to only be from Cloudfront
   validates :domain_name, 
     format: { with: /\.cloudfront\.net\z/, message: "domain must be from .cloudfront.net" }
     # uniqueness: true, 
 
+    # Content version has to be an interger, we will make sure it is an incremental version in the controller.
   validates :content_version, numericality: { only_integer: true }
 end
 
+# We are extending a class from Sinatra::Base to turn this generic class to utilize the sinatra web-framework
 class TerraTownsMockServer < Sinatra::Base
 
   def error code, message
@@ -39,6 +57,7 @@ class TerraTownsMockServer < Sinatra::Base
     end
   end
 
+  # return a harcoded access token
   def x_access_code
     '9b49b3fb-b8e9-483c-b703-97ba88eef8e0'
   end
@@ -48,7 +67,10 @@ class TerraTownsMockServer < Sinatra::Base
   end
 
   def find_user_by_bearer_token
+    # https://swagger.io/docs/specification/authentication/bearer-authentication/
     auth_header = request.env["HTTP_AUTHORIZATION"]
+
+    # Check if the bearer token is blank/missing, if so throw an error. 
     if auth_header.nil? || !auth_header.start_with?("Bearer ")
       error 401, "a1000 Failed to authenicate, bearer token invalid and/or teacherseat_user_uuid invalid"
     end
@@ -58,10 +80,12 @@ class TerraTownsMockServer < Sinatra::Base
       error 401, "a1001 Failed to authenicate, bearer token invalid and/or teacherseat_user_uuid invalid"
     end
 
+    # Does the token match the one in our database? if we cant find it than return an error or if it doesn't match. code = access_code = token
     if params['user_uuid'].nil?
       error 401, "a1002 Failed to authenicate, bearer token invalid and/or teacherseat_user_uuid invalid"
     end
 
+    
     unless code == x_access_code && params['user_uuid'] == x_user_uuid
       error 401, "a1003 Failed to authenicate, bearer token invalid and/or teacherseat_user_uuid invalid"
     end
@@ -185,4 +209,5 @@ class TerraTownsMockServer < Sinatra::Base
   end
 end
 
+# This is what will run the server.
 TerraTownsMockServer.run!
