@@ -21,3 +21,7 @@ The general format:
 
 ## Documentaion
 - [Week 0](https://github.com/ArtistYay/Terraform-Bootcamp-Documentation/blob/main/journal/week0.md)
+
+- [Week 1](https://github.com/ArtistYay/Terraform-Bootcamp-Documentation/blob/main/journal/week1.md)
+
+- [Week 2](https://github.com/ArtistYay/Terraform-Bootcamp-Documentation/blob/main/journal/week2.md)
