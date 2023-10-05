@@ -244,3 +244,85 @@ func resourceHouseUpdate(ctx context.Context, d *schema.ResourceData, m interfac
 	config := m.(*Config)
 
 	homeUUID := d.Id()
+
+	payload := map[string]interface{}{
+		"name": d.Get("name").(string),
+		"description": d.Get("description").(string),
+		"content_version": d.Get("content_version").(int),
+	}
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// Construct the HTTP Request
+	url := config.Endpoint+"/u/"+config.UserUuid+"/homes/"+homeUUID
+	log.Print("URL: "+ url)
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// Set Headers
+	req.Header.Set("Authorization", "Bearer "+config.Token)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	defer resp.Body.Close()
+
+	// StatusOK = 200 HTTP Response Code
+	if resp.StatusCode != http.StatusOK {
+		return diag.FromErr(fmt.Errorf("failed to update home resource, status_code: %d, status: %s", resp.StatusCode, resp.Status))
+	}
+
+	log.Print("resourceHouseUpdate:end")
+
+	d.Set("name",payload["name"])
+	d.Set("description",payload["description"])
+	d.Set("content_version",payload["content_version"])
+	return diags
+}
+
+func resourceHouseDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	log.Print("resourceHouseDelete:start")
+	var diags diag.Diagnostics
+
+	config := m.(*Config)
+
+	homeUUID := d.Id()
+
+	// Construct the HTTP Request
+	url :=  config.Endpoint+"/u/"+config.UserUuid+"/homes/"+homeUUID
+	log.Print("URL: "+ url)
+	req, err := http.NewRequest("DELETE", url , nil)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// Set Headers
+	req.Header.Set("Authorization", "Bearer "+config.Token)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	defer resp.Body.Close()
+
+	// StatusOK = 200 HTTP Response Code
+	if resp.StatusCode != http.StatusOK {
+		return diag.FromErr(fmt.Errorf("failed to delete home resource, status_code: %d, status: %s", resp.StatusCode, resp.Status))
+	}
+
+	d.SetId("")
+
+	log.Print("resourceHouseDelete:end")
+	return diags
+}
