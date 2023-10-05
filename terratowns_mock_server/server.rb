@@ -15,7 +15,7 @@ class Home
   attr_accessor :town, :name, :description, :domain_name, :content_version
 
   #gamers-grovo
-  validates :town, presence: true inclusion: { in: [
+  validates :town, presence: true, inclusion: { in: [
     'melomaniac-mansion',
     'cooker-cove',
     'video-valley',
