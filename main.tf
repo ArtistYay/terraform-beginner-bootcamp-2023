@@ -15,13 +15,13 @@ terraform {
   #  }
   #}
 
- # cloud {
- #   organization = "ArtistUniverse"
-#
- #   workspaces {
- #     name = "terra-house"
- #   }
- # }
+  cloud {
+    organization = "ArtistUniverse"
+
+    workspaces {
+      name = "terra-house"
+    }
+  }
   
   #required_providers {
   #  random = {
