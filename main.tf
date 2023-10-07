@@ -33,27 +33,39 @@ terraform {
 #  # Configuration options
 }
 provider "terratowns" {
-  endpoint = "http://localhost:4567/api"
-  user_uuid = "e328f4ab-b99f-421c-84c9-4ccea042c7d1"
-  token = "9b49b3fb-b8e9-483c-b703-97ba88eef8e0"
+  endpoint = var.terratowns_endpoint 
+  user_uuid = var.teacherseat_user_uuid
+  token = var.terratowns_access_token
 }
-#module "terrahouse_aws" {
-#  source = "./modules/terrahouse_aws"
-#  user_uuid = var.user_uuid
-#  bucket_name = var.bucket_name
-#  index_html_filepath = var.index_html_filepath
-#  error_html_filepath = var.error_html_filepath
-#  content_version = var.content_version
-#  assets_path = var.assets_path
-#}
+module "terrahouse_aws" {
+  source = "./modules/terrahouse_aws"
+  user_uuid = var.teacherseat_user_uuid
+  bucket_name = var.bucket_name
+  index_html_filepath = var.index_html_filepath
+  error_html_filepath = var.error_html_filepath
+  content_version = var.content_version
+  assets_path = var.assets_path
+}
 
 resource "terratowns_home" "home" {
-  name = "Destiny 2"
+  name = "Baldur's Gate 3: A Life Changing Masterpiece!"
   description = <<DESCRIPTION
-Destiny 2
+In the heart of the Forgotten Realms, where swords clash and magic reigns, lies a tale of epic adventure.
+
+Baldur's Gate 3 is a Dungeons & Dragons RPG set in a world where anything is possible.
+
+You are a Tav'ern, a mortal vessel for an otherworldly parasite. Implanted with a Mindflayer tadpole, you must find a way to remove it before it takes control of your mind.
+
+Along the way, you'll gather a party of companions, each with their own unique skills and abilities. Together, you'll explore the Sword Coast, battle fearsome creatures, and uncover hidden secrets.
+
+But beware, the Mindflayer tadpole is not the only danger that awaits you. The world is in turmoil, and dark forces are at work.
+
+Can you save yourself and the world from the Mindflayer threat?
+
+Only you can decide.
 DESCRIPTION
-  #domain_name = module.terrahouse_aws.cloudfront_url
-  domain_name = "3fdq3gz.cloudfront.net"
-  town = "gamers-grotto"
+  domain_name = module.terrahouse_aws.cloudfront_url
+  #domain_name = "3fdq3gz.cloudfront.net"
+  town = "missingo"
   content_version = 1
 }
