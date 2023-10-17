@@ -66,6 +66,6 @@ Only you can decide.
 DESCRIPTION
   domain_name = module.terrahouse_aws.cloudfront_url
   #domain_name = "3fdq3gz.cloudfront.net"
-  town = "missingo"
+  town = "gamers-grotto"
   content_version = 1
 }

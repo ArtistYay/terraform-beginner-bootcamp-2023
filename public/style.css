@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+}
+
+.title {
+  text-align: center;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.image {
+  text-align: center;
+} 
